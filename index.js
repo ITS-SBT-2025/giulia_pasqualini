@@ -35,8 +35,29 @@ const app = express()
 app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
-app.get('/books', (req, res) => {
-    res.send('Ecco i tuoi libri');
+app.get('/books', function (req, res) {
+    let autore = req.query.autore;
+    let titolo = req.query.titolo;
+
+    let parametri_di_ricerca = [];
+
+    let dbquery = "select name, author from books";
+    if (autore) {
+       parametri_di_ricerca.push(" author like = '%"+autore+"%'");
+    }
+    if (titolo) {
+        parametri_di_ricerca.push(" title like = '%" + titolo + "%'");
+    }
+
+    let queryfinale = dbquery;
+    if (parametri_di_ricerca.length > 0) {
+        queryfinale+= " WHERE";
+        queryfinale+= parametri_di_ricerca.join("AND")
+    }
+    // for (i=0; i<parametri_di_ricerca.length; i++) {
+    //     queryfinale += " " + parametri_di_ricerca[i];
+    // }
+    res.send('Ecco i tuoi libri per la ricerca: ' + queryfinale);
 });
 app.post('/', (req, res) => {
     res.send('Questo è il tuo libro');
