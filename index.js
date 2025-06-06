@@ -63,3 +63,12 @@ app.post('/', (req, res) => {
     res.send('Questo è il tuo libro');
 })
 app.listen(3000);
+
+function getLibro(req,res) {
+    if (req.params.idlibro) {
+        res.send ("Nome libro trovato:" + req.params.idlibro);
+    } else {
+        res.status(404);
+        res.send ("Non ho trovato il libro che cercavi");
+    }
+}
