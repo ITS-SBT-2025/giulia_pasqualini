@@ -11,6 +11,10 @@ app.get('/', function (req, res) {
   res.send('Hello World')
 });
 
+function miomw(req, res, next) {
+  console.log("Middleware chiamato");
+  next();
+}
 
 function cercaLibri  (req, res) {
     let autore=req.params.autore;

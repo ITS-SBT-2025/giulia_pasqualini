@@ -62,7 +62,13 @@ app.get('/books', function (req, res) {
 app.post('/', (req, res) => {
     res.send('Questo è il tuo libro');
 })
-app.listen(3000);
+app.use(miomw);
+app.use(express.json());
+
+function miomw(req, res, next) {
+  console.log("Middleware chiamato");
+  next();
+}
 
 function getLibro(req,res) {
     if (req.params.idlibro) {
@@ -72,3 +78,5 @@ function getLibro(req,res) {
         res.send ("Non ho trovato il libro che cercavi");
     }
 }
+
+app.listen(3000);
