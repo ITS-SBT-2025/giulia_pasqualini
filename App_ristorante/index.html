@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Ristorante</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h1>Benvenuti al Ristorante</h1>
+    <form id="addDishForm">
+        <label for="nome">Nome del piatto:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="ingredienti">Ingredienti:</label>
+        <input type="text" id="ingredienti" name="ingredienti" required>
+
+        <button type="submit">Aggiungi Piatto</button>
+    </form>
+
+    <script>
+        document.getElementById('addDishForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const ingredienti = document.getElementById('ingredienti').value;
+
+            const response = await fetch('/addDish', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, ingredienti }),
+            });
+
+            if (response.ok) {
+                alert('Piatto aggiunto con successo');
+            } else {
+                alert('Errore nell\'aggiunta del piatto');
+            }
+        });
+    </script>
+</html>

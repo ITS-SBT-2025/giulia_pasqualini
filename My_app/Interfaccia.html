@@ -1,0 +1,38 @@
+<html>
+<head>
+  <title>Videogiochi</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <h1>Benvenuti nella sezione Videogiochi</h1>
+  <p>Qui puoi aggiungere i tuoi videogiochi preferiti e indicare se contengono ragni.</p>
+
+<form id="addGameForm">
+  <label for="nome">Nome del videogioco:</label>
+  <input type="text" id="nome" name="nome" required>
+  <label for="presenzaRagni">Contiene ragni?</label>
+  <input type="checkbox" id="presenzaRagni" name="presenzaRagni">
+  <button type="submit">Aggiungi Videogioco</button>
+</form>
+
+<script>
+  document.getElementById('addGameForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nome = document.getElementById('nome').value;
+    const presenzaRagni = document.getElementById('presenzaRagni').checked;
+
+    const response = await fetch('/addGame', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, presenzaRagni }),
+    });
+
+    if (response.ok) {
+      alert('Videogioco aggiunto con successo');
+    } else {
+      alert('Errore nell\'aggiunta del videogioco');
+    }
+  });
+</script>
+</body>
+</html>
