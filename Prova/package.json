@@ -1,12 +1,11 @@
 {
-  "name": "es",
+  "name": "prova",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
-  "main": "es.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "es": "nodemon es.js",
-    "start": "node es.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +13,6 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "zod": "^3.25.63"
+    "nodemon": "^3.1.10"
   }
 }

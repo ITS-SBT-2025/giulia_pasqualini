@@ -1,11 +1,11 @@
-import dbProducts from "../../Database/products.js";
+import dbProducts from "../../database/products.js";
+import ErrorWithStatus from "../../error-with-status.js";
 
 export const getProductById = (id) => {
   const product = dbProducts.find((p) => p.id === id);
 
   if (!product) {
-    // TODO: gestire errore
-    return null;
+    throw new ErrorWithStatus(404, `Prodotto con id ${id} non trovato`);
   }
 
   return product;
@@ -24,7 +24,10 @@ export const createProduct = (product) => {
     id: maxId + 1,
   };
 
-  dbProducts.push(newProduct);
+  dbProducts.push({
+    ...product,
+    id: maxId + 1,
+  });
 
   return newProduct;
 };
@@ -33,8 +36,7 @@ export const updateProduct = (product) => {
   const index = dbProducts.findIndex((p) => p.id === product.id);
 
   if (index === -1) {
-    // TODO: gestire errore
-    return null;
+    throw new ErrorWithStatus(404, `Prodotto con id ${product.id} non trovato`);
   }
 
   dbProducts[index] = { ...product };
@@ -46,8 +48,7 @@ export const deleteProduct = (id) => {
   const index = dbProducts.findIndex((p) => p.id === id);
 
   if (index === -1) {
-    // TODO: gestire errore
-    return false;
+    throw new ErrorWithStatus(404, `Prodotto con id ${id} non trovato`);
   }
 
   dbProducts.splice(index, 1);

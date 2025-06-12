@@ -3,6 +3,8 @@ import "dotenv/config";
 import express from 'express';
 import pageRoute from './Components/Pages/pages.route.js';
 import productRoute from './Components/Products/products.route.js';
+import zod from 'zod';
+
 const app = express()
 
 //Middleware
@@ -18,9 +20,21 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(pageRoute);
 app.use(productRoute);
+
 app.use((req, res) => { 
     res.status(404).send("Pagina non trovata.");
 });
+
+app.use((err, req, res, next) => {
+  if (err.status >= 400 && err.status <= 499) {
+    res.status(err.status).json({ error: err.message });
+  } else {
+    console.error(err.stack);
+
+    res.status(500).json({ error: "Qualcosa è andato storto!" });
+  }
+});
+
 
 //Server
 app.listen(process.env.PORT, () => {
