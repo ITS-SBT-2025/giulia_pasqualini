@@ -27,7 +27,7 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // Importa il middleware personalizzato e le rotte principali
-const middleware = require("./main/middleware");
+const middleware = require("./Main/middleware");
 const routes = require("./routes/main-router");
 
 // Applica i middleware all'app Express

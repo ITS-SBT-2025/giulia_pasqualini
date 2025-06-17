@@ -1,31 +1,31 @@
 import * as productsData from "./products.data.js";
 
-export const getProductById = (id) => {
-  const product = productsData.getProductById(id);
+export const getProductById = async (id) => {
+  const product = await productsData.getProductById(id);
 
   return product;
 };
 
-export const getAllProducts = () => {
-  const products = productsData.getAllProducts();
+export const getAllProducts = async () => {
+  const products = await productsData.getAllProducts();
 
   return products;
 };
 
-export const createProduct = (product) => {
-  const newProduct = productsData.createProduct(product);
+export const createProduct = async (product) => {
+  const newProduct = await productsData.createProduct(product);
 
   return newProduct;
 };
 
-export const updateProduct = (product) => {
-  const updatedProduct = productsData.updateProduct(product);
+export const updateProduct = async (product) => {
+  const updatedProduct = await productsData.updateProduct(product);
 
   return updatedProduct;
 };
 
-export const deleteProduct = (id) => {
-  const result = productsData.deleteProduct(id);
+export const deleteProduct = async (id) => {
+  const result = await productsData.deleteProduct(id);
 
   return result;
 };
