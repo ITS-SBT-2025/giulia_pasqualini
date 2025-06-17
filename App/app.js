@@ -1,28 +1,43 @@
+// Carica le variabili d'ambiente dal file .env
+require('dotenv').config();
+
+// Stampa la password del database (solo per debug, rimuovere in produzione)
+console.log ("DB_Password is " + process.env.DB_PASSWORD);
+
+// Importa ed inizializza Express
 const express = require('express');
 const app = express();
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
-const booksRoutes = require('./Routes/books');
-const logger = require('./Main/middleware');
 
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cookieParser());
-app.use(morgan('dev'));
-app.use(logger);
+// Importa i moduli necessari
+const config = require('config');
+const fs = require('fs'); // leggo i certificati
 
-app.use('/books', booksRoutes);
+let filechiave = config.get("chiaveprivata");
 
-app.get('/', (req, res) => {
-    if (!req.cookies.authenticato) {
-        res.cookie('Autenticato', { maxAge: 900000, httpOnly: true });
-        console.log("Cookie autenticato impostato");
-    }
-    res.send('Hello World');
-});
+const miachiave = fs.readFileSync(filechiave);
+const miocert = fs.readFileSync(config.get("certificato"));
+const credential = {key: miachiave, cert: miocert };
 
-app.listen(3000, () => {
-    console.log('Server in ascolto su http://localhost:3000');
-});
+const https = require('https');
+const http = require('http');
+const secureServer = https.createServer({key: miachiave, cert: miocert }, app);
+const unsecureServer = http.createServer(app);
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
+// Importa il middleware personalizzato e le rotte principali
+const middleware = require("./main/middleware");
+const routes = require("./routes/main-router");
+
+// Applica i middleware all'app Express
+middleware(app, express);
+// Applica le rotte all'app Express
+routes(app);
+
+
+
+
+// Avvia il server sulla porta 3000
+secureServer.listen(443, () => { console.log("Secure server is running on port 443"); });
+unsecureServer.listen(80, () => { console.log("Secure server is running on port 80"); });
