@@ -1,4 +1,6 @@
 import * as usersService from "./users.service.js";
+import z from "zod";
+import ErrorWithStatus from "../../error_with_status.js"
 
 export const getUserById = async (req, res) => {
  const schema = z.object({
@@ -12,19 +14,19 @@ export const getUserById = async (req, res) => {
     if (!isValidData.success) {
         throw new ErrorWithStatus(422, isValidData.error.issues);
     }
-  const user = usersService.getUserById(Number(req.params.id));
+  const user = await usersService.getUserById(Number(req.params.id));
   res.status(200).json(user);
 };
 
-export const getAllUsers = (req, res) => {
-  const users = usersService.getAllUsers();
+export const getAllUsers = async (req, res) => {
+  const users = await usersService.getAllUsers();
 
   res.status(200).json(users);
 };
 
 export const createUser = async (req, res) => {
     const schema = z.object({
-    params: z.object({
+    body: z.object({
       name: z.string(),
       email: z.string(),
       age: z.number().int().positive(),
@@ -32,12 +34,12 @@ export const createUser = async (req, res) => {
     }),
   });
     const isValidData = await schema.safeParseAsync({
-      params: req.params,
+      body: req.body,
     });
     if (!isValidData.success) {
         throw new ErrorWithStatus(422, isValidData.error.issues);
     }
-  const user = usersService.createUser(req.body);
+  const user = await usersService.createUser(req.body);
 
   res.status(201).json(user);
 };
@@ -58,7 +60,7 @@ export const updateUser = async (req, res) => {
     params: req.params,
     body: req.body,
   });
-  const user = usersService.updateUser({
+  const user = await usersService.updateUser({
     ...req.body,
     id: Number(req.params.id),
   });
@@ -80,7 +82,7 @@ export const deleteUser = async (req, res) => {
   if (!isValidData.success) {
     throw new ErrorWithStatus(422, isValidData.error.issues);
   }
-  const result = usersService.deleteUser(Number(req.params.id));
+  const result = await usersService.deleteUser(Number(req.params.id));
 
   res.status(200).json(result);
 };

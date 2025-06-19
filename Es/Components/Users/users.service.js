@@ -1,4 +1,5 @@
 import * as usersData from "./users.data.js";
+import bcrypt from "bcrypt";
 
 export const getUserById = async (id) => {
   const user = await usersData.getUserById(id);
@@ -11,13 +12,15 @@ export const getAllUsers = () => {
 };
 
 export const createUser = async (user) => {
-  const newUser = await usersData.createUser(user);
-  return newUser;
-};
+  const newUserId = await usersData.createUser({
+    ...user,
+    password: bcrypt.hashSync(user.password),
+  });
+}
 
 export const updateUser = async (user) => {
-  const updatedUser = await usersData.updateUser(user);
-  return updatedUser;
+  await usersData.updateUser(user);
+  return await getUserById(user.id);
 };
 
 export const deleteUser = async (id) => {

@@ -1,5 +1,5 @@
-import ErrorWithStatus from "../../error-with-status.js";
-import poolPromise from "../../Config/mssql.config.js";
+import ErrorWithStatus from "../../error_with_status.js"
+import poolPromise from "../Config/mssql.config.js";
 
 export const getProductById = async (id) => {
   const pool = await poolPromise;
@@ -25,7 +25,7 @@ export const getProductById = async (id) => {
 export const createProduct = async (product) => {
   const pool = await poolPromise;
   const sql = `INSERT INTO products (name, description, price, inStock)
-               OUTPUT INSERTED.id,
+               OUTPUT INSERTED.id
                VALUES (@name, @description, @price, @inStock)`;
   const queryResult = await pool
   .request()

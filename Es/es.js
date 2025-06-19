@@ -2,13 +2,14 @@
 import "dotenv/config";
 import express from 'express';
 import pageRoute from './Components/Pages/pages.route.js';
-import productRoute from './Components/Products/products.route.js';
-import zod from 'zod';
+import productRoute from './Components/Products/products.route.js'
+import userRoute from './Components/Users/users.route.js';
 
 const app = express()
 
 //Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // app.use(req, res, next => {
 //     console.log("Questo è un middleware");
 //     next();
@@ -19,7 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 // });
 
 app.use(pageRoute);
-app.use(productRoute);
+app.use("/products", productRoute);
+app.use("/users", userRoute);
 
 app.use((req, res) => { 
     res.status(404).send("Pagina non trovata.");
