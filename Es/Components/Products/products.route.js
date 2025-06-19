@@ -1,12 +1,13 @@
 import express from "express";
 import * as productsController from "./products.controller.js";
+import verifyToken from "../../middleware/verify-token.middleware.js";
 
 const router = express.Router();
 
-router.get("/", productsController.getAllProducts);
-router.post("/", productsController.createProduct);
 router.get("/:id", productsController.getProductById);
-router.put("/:id", productsController.updateProduct);
-router.delete("/:id", productsController.deleteProduct);
+router.get("/", productsController.getAllProducts);
+router.post("/", verifyToken, productsController.createProduct);
+router.put("/:id", verifyToken, productsController.updateProduct);
+router.delete("/:id", verifyToken, productsController.deleteProduct);
 
 export default router;
